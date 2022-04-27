@@ -11,14 +11,17 @@ using UnityEngine;
 
 public class EnemyPhysics : MonoBehaviour
 {
+    // Entity reference
+    public EnemyEntity entity;
+
+    // Private roation
+    private Vector3 eulerRotaion = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
         entity.position = transform.localPosition;
     }
-
-    public EnemyEntity entity;
-
     // Update is called once per frame
     void Update()
     {
@@ -66,7 +69,9 @@ public class EnemyPhysics : MonoBehaviour
         // Adjust rotation
         eulerRotaion.y = entity.heading;
         transform.localEulerAngles = eulerRotaion;
+
+        // Update total distance traveled
+        entity.distanceTraveled = entity.distanceTraveled + (entity.speed * Time.deltaTime);
     }
 
-    public Vector3 eulerRotaion = Vector3.zero;
 }

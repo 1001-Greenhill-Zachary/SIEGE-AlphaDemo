@@ -19,6 +19,10 @@ public class TowerSelectionMgr : MonoBehaviour
     //Booleans for checking states of tower selection
     public bool isTowerSelected = false;
     public bool isPlacing = false;
+    public bool toggleRanges = false;
+
+    //Box colliders for checking placement
+    public List<Collider> colliderZones;
 
     //Index for the currently selected tower
     public int selectedTowerIndex = 1;
@@ -26,10 +30,12 @@ public class TowerSelectionMgr : MonoBehaviour
     //The mouse position, it intersects with the ground to determine position
     public Vector3 intersectionPoint = Vector3.zero;
     //From as6, variables for checking if we clicked on an entity
-    public float clickRadius = 100;
+    public float clickRadius = 2;
     public List<int> IDs = new List<int>();
     public int closestTower = 0;
-    public bool towerClickedOn;
+    public bool isTowerClickedOn;
+    public TowerEntity towerSelectedByClick;
+    public bool isTowerCurrentlySelectedByClick = false;
 
 
     //--------------------------------------------------------------------------------------------------
@@ -40,6 +46,7 @@ public class TowerSelectionMgr : MonoBehaviour
         for (int i = 0; i < towerTypeList.Count; i++)
         {
             towerTypeList[i].towerModel.SetActive(false);
+            towerTypeList[i].selectionCircle.SetActive(false);
         }
     }
     //--------------------------------------------------------------------------------------------------
@@ -49,76 +56,128 @@ public class TowerSelectionMgr : MonoBehaviour
         //Select tower to place (1)---Copy this and change key numbers for additional towers
         if (Input.GetKeyUp(KeyCode.Alpha1) || Input.GetKeyUp(KeyCode.Keypad1))
         {
-            if (selectedTowerIndex == 1 && isTowerSelected == true)
-            {
-                //Unselect Current tower
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
 
-                isTowerSelected = false;
+            if (TowerMgr.inst.tower1Prefab.GetComponent<TowerEntity>().cost > GameMgr.inst.currency)
+            {
+                Debug.Log("Unaviable Funds");
             }
             else
             {
-                //Unselect Current tower
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
-                //Play SelectionSound
-                SoundMgr.inst.PlaySelectionSound();
-                
 
-                selectedTowerIndex = 1;
-                isTowerSelected = true;
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(true);
+                if (towerSelectedByClick != null)
+                {
+                    isTowerCurrentlySelectedByClick = false;
+                    towerSelectedByClick.selectionCircle.SetActive(false);
+                    towerSelectedByClick.selectedModeText.SetActive(false);
+                }
+                if (selectedTowerIndex == 1 && isTowerSelected == true)
+                {
+                    //Unselect Current tower
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
+
+                    isTowerSelected = false;
+                }
+                else
+                {
+                    //Unselect Current tower
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
+                    //Play SelectionSound
+                    SoundMgr.inst.PlaySelectionSound();
+
+
+                    selectedTowerIndex = 1;
+                    isTowerSelected = true;
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(true);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(true);
+
+                }
+                UIMgr.inst.UpdateTower1UI();
             }
-
-            UIMgr.inst.UpdateTower1UI();
         }
         //Select tower to place (2)
         if (Input.GetKeyUp(KeyCode.Alpha2) || Input.GetKeyUp(KeyCode.Keypad2))
         {
-            if (selectedTowerIndex == 2 && isTowerSelected == true)
+            if (TowerMgr.inst.tower2Prefab.GetComponent<TowerEntity>().cost > GameMgr.inst.currency)
             {
-                //Unselect Current tower
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
-
-                isTowerSelected = false;
+                Debug.Log("Unaviable Funds");
             }
             else
             {
-                //Unselect Current tower
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
-                //Play SelectionSound
-                SoundMgr.inst.PlaySelectionSound();
-                
+                if (towerSelectedByClick != null)
+                {
+                    isTowerCurrentlySelectedByClick = false;
+                    towerSelectedByClick.selectionCircle.SetActive(false);
+                    towerSelectedByClick.selectedModeText.SetActive(false);
+                }
+                if (selectedTowerIndex == 2 && isTowerSelected == true)
+                {
+                    //Unselect Current tower
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
 
-                selectedTowerIndex = 2;
-                isTowerSelected = true;
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(true);
+                    isTowerSelected = false;
+                }
+                else
+                {
+                    //Unselect Current tower
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
+                    //Play SelectionSound
+                    SoundMgr.inst.PlaySelectionSound();
+
+
+                    selectedTowerIndex = 2;
+                    isTowerSelected = true;
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(true);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(true);
+                }
+                UIMgr.inst.UpdateTower2UI();
             }
-            UIMgr.inst.UpdateTower2UI();
         }
+
+
         if (Input.GetKeyUp(KeyCode.Alpha3) || Input.GetKeyUp(KeyCode.Keypad3))
         {
-            if (selectedTowerIndex == 3 && isTowerSelected == true)
+            if (TowerMgr.inst.tower3Prefab.GetComponent<TowerEntity>().cost > GameMgr.inst.currency)
             {
-                //Unselect Current tower
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
-
-                isTowerSelected = false;
+                Debug.Log("Unaviable Funds");
             }
             else
             {
-                //Unselect Current tower
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
-                //Play SelectionSound
-                SoundMgr.inst.PlaySelectionSound();
+                if (towerSelectedByClick != null)
+                {
+                    isTowerCurrentlySelectedByClick = false;
+                    towerSelectedByClick.selectionCircle.SetActive(false);
+                    towerSelectedByClick.selectedModeText.SetActive(false);
+                }
+                if (selectedTowerIndex == 3 && isTowerSelected == true)
+                {
+                    //Unselect Current tower
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
+
+                    isTowerSelected = false;
+                }
+                else
+                {
+                    //Unselect Current tower
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
+                    //Play SelectionSound
+                    SoundMgr.inst.PlaySelectionSound();
 
 
-                selectedTowerIndex = 3;
-                isTowerSelected = true;
-                towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(true);
+                    selectedTowerIndex = 3;
+                    isTowerSelected = true;
+                    towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(true);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(true);
+                }
+                UIMgr.inst.UpdateTower3UI();
             }
-
-            UIMgr.inst.UpdateTower3UI();
         }
+
         //If a tower is selected, hover the model at the mouse position
         if (isTowerSelected)
         {
@@ -137,6 +196,7 @@ public class TowerSelectionMgr : MonoBehaviour
                     print("Tower Placed");
                     isTowerSelected = false;
                     towerTypeList[selectedTowerIndex - 1].towerModel.SetActive(false);
+                    towerTypeList[selectedTowerIndex - 1].selectionCircle.SetActive(false);
                 }
                 else
                 {
@@ -146,16 +206,83 @@ public class TowerSelectionMgr : MonoBehaviour
             }
             else
             {
-                towerClickedOn = ClickedOnTower();
-                if (towerClickedOn)
+                if (towerSelectedByClick != null)
                 {
-                    //Here we will display tower information because it is clicked on
+                    isTowerCurrentlySelectedByClick = false;
+                    towerSelectedByClick.selectionCircle.SetActive(false);
+                    towerSelectedByClick.selectedModeText.SetActive(false);
+                }
+                isTowerClickedOn = ClickedOnTower();
+                if (isTowerClickedOn)
+                {
+                    if (towerSelectedByClick != null)
+                    {
+                        isTowerCurrentlySelectedByClick = true;
+                        towerSelectedByClick.selectionCircle.SetActive(true);
+                        towerSelectedByClick.selectedModeText.SetActive(true);
+                    }
+                }
+                else
+                {
+                    if (towerSelectedByClick != null)
+                    {
+                        isTowerCurrentlySelectedByClick = false;
+                        towerSelectedByClick.selectionCircle.SetActive(false);
+                        towerSelectedByClick.selectedModeText.SetActive(false);
+                    }
                 }
                 //Planning on this selecting an entity (Tower or enemy) in the world and 
                 //displaying imformation about it like health, damage.
             }
 
 
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            toggleRanges = !toggleRanges;
+            for (int i=0;i<TowerMgr.inst.placedTowers.Count;i++)
+            {
+                TowerMgr.inst.placedTowers[i].GetComponent<TowerEntity>().selectionCircle.SetActive(toggleRanges);
+                TowerMgr.inst.placedTowers[i].GetComponent<TowerEntity>().selectedModeText.SetActive(toggleRanges);
+            }
+        }
+
+        if (isTowerCurrentlySelectedByClick)
+        {
+            if (Input.GetKeyUp(KeyCode.RightArrow))
+            {
+                towerSelectedByClick.targetingModeIndex++;
+                if (towerSelectedByClick.targetingModeIndex > TowerMgr.inst.targetingModes.Count - 1)
+                {
+                    towerSelectedByClick.targetingModeIndex = 0;
+                }
+                towerSelectedByClick.targetingMode = TowerMgr.inst.targetingModes[towerSelectedByClick.targetingModeIndex];
+                towerSelectedByClick.selectedModeText.GetComponent<TextMesh>().text = towerSelectedByClick.targetingMode;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftArrow))
+            {
+                towerSelectedByClick.targetingModeIndex--;
+                if (towerSelectedByClick.targetingModeIndex < 0)
+                {
+                    towerSelectedByClick.targetingModeIndex = TowerMgr.inst.targetingModes.Count - 1;
+                }
+                towerSelectedByClick.targetingMode = TowerMgr.inst.targetingModes[towerSelectedByClick.targetingModeIndex];
+                towerSelectedByClick.selectedModeText.GetComponent<TextMesh>().text = towerSelectedByClick.targetingMode;
+            }
+            if (Input.GetKeyUp(KeyCode.Delete))
+            {
+                for (int i=0;i<TowerMgr.inst.placedTowers.Count;i++)
+                {
+                    if (TowerMgr.inst.placedTowers[i].GetComponent<TowerEntity>().placedTowerID == closestTower)
+                    {
+                        Destroy(TowerMgr.inst.placedTowers[i]);
+                        TowerMgr.inst.placedTowers.RemoveAt(i);
+                        TowerMgr.inst.currentTowerPlacingID--;
+                        break;
+                    }
+                }
+            }
         }
     }
     //--------------------------------------------------------------------------------------------------
@@ -193,6 +320,13 @@ public class TowerSelectionMgr : MonoBehaviour
         if (IDs.Count > 0)
         {
             closestTower = FindClosestTower(intersectionPoint);
+            //for (int i=0;i<TowerMgr.inst.placedTowers.Count;i++)
+            //{
+            //    if (closestTower == TowerMgr.inst.placedTowers[i].GetComponent<TowerEntity>().placedTowerID)
+            //    {
+            //        towerSelectedByClick = TowerMgr.inst.placedTowers[closestTower].GetComponent<TowerEntity>();
+            //    }
+            //}
             print("Tower Clicked On ID " + closestTower);
             return true;
         }
@@ -202,6 +336,11 @@ public class TowerSelectionMgr : MonoBehaviour
     //From as6, will find the closest tower in the predetermined click radius
     public int FindClosestTower(Vector3 intPoint)
     {
+
+        if (towerSelectedByClick != null)
+        {
+            towerSelectedByClick.selectionCircle.SetActive(false);
+        }
         int ID = 0;
         float min = 10000000000;
         for (int i = 0; i < IDs.Count; i++)
@@ -209,6 +348,7 @@ public class TowerSelectionMgr : MonoBehaviour
             if (Vector3.Distance(intPoint, TowerMgr.inst.placedTowers[IDs[i]].GetComponent<TowerEntity>().position) < min)
             {
                 min = Vector3.Distance(intPoint, TowerMgr.inst.placedTowers[IDs[i]].GetComponent<TowerEntity>().position);
+                towerSelectedByClick = TowerMgr.inst.placedTowers[IDs[i]].GetComponent<TowerEntity>();
                 ID = IDs[i];
             }
         }

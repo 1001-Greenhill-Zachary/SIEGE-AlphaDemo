@@ -18,6 +18,7 @@ public class EnemyEntity : MonoBehaviour
     public float speed;
     public float heading; // Degrees
     public float health;
+    public float distanceTraveled;
 
 //-------------------------------
     // Constants
@@ -28,4 +29,5 @@ public class EnemyEntity : MonoBehaviour
     public float turnRate;
     public float maxSpeed;
     public float minSpeed;
+    public int bounty;
 }

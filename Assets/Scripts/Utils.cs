@@ -1,7 +1,7 @@
 ﻿/* -----------------------------------------------------------------------------
 FILE NAME:      Utils.cs
-AUTHOR:         Zach Greenhill
-E-MAIL:         zgreenhill@nevada.unr.edu
+AUTHOR:         Zach Greenhill and Curtis Burchfield
+E-MAIL:         zgreenhill@nevada.unr.edu or cburchfield@nevada.unr.edu
 DESCRIPTION:    Static class of uitilies for other scripts
 NOTES:          
 ---------------------------------------------------------------------------- */
@@ -74,4 +74,191 @@ public static class Utils
 
         return newHeading;
     }
+
+    public static float ToDegrees(float radians)
+    {
+        float degrees = radians * (180 / Mathf.PI);
+        //degrees = degrees + 180;
+        return degrees;
+    }
+
+    public static GameObject GetTarget(string targetingMode, TowerEntity tower)
+    {
+        GameObject target = null;
+        if (targetingMode == TowerMgr.inst.targetingModes[0])//farthestAlong
+        {
+            target = FindFarthestAlongEnemy(tower);
+        }
+        if (targetingMode == TowerMgr.inst.targetingModes[1])//mostHealth
+        {
+            target = FindMostHealthEnemy(tower);
+        }
+        if (targetingMode == TowerMgr.inst.targetingModes[2])//fastest
+        {
+            target = FindFastestEnemy(tower);
+        }
+        if (targetingMode == TowerMgr.inst.targetingModes[3])//closest
+        {
+            target = FindClosestEnemy(tower);
+        }
+        if (targetingMode == TowerMgr.inst.targetingModes[4])//leastAlong/last
+        {
+            target = FindLeastAlongEnemy(tower);
+        }
+        if (targetingMode == TowerMgr.inst.targetingModes[5])//slowest
+        {
+            target = FindSlowestEnemy(tower);
+        }
+        if (targetingMode == TowerMgr.inst.targetingModes[6])//leastHealth
+        {
+            target = FindLeastHealthEnemy(tower);
+        }
+
+        return target;
+    }
+
+    public static GameObject FindFarthestAlongEnemy(TowerEntity tower)
+    {
+        GameObject target = null;
+        float farthestAlong = -1;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+            if (farthestAlong < EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().distanceTraveled 
+                && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                //Debug.Log("Distance: " + distanceSquaredToTarget + "RANGE: " + tower.range);
+                farthestAlong = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().distanceTraveled;
+                target = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return target;
+    }
+
+    public static GameObject FindMostHealthEnemy(TowerEntity tower)
+    {
+        GameObject target = null;
+        float mostHealth = 0;
+        //float distanceSquared = Mathf.Infinity;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+
+            if (mostHealth < EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().health
+                && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                mostHealth = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().health;
+                target = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return target;
+    }
+
+    public static GameObject FindFastestEnemy(TowerEntity tower)
+    {
+        GameObject target = null;
+        float fastestSpeed = 0;
+        //float distanceSquared = Mathf.Infinity;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+
+            if (fastestSpeed < EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().speed
+                && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                fastestSpeed = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().speed;
+                target = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return target;
+    }
+
+    public static GameObject FindClosestEnemy(TowerEntity tower)
+    {
+        GameObject closestTarget = null;
+        float distanceSquared = Mathf.Infinity;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+            if (distanceSquaredToTarget < distanceSquared && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                distanceSquared = distanceSquaredToTarget;
+                closestTarget = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return closestTarget;
+    }
+
+    public static GameObject FindLeastAlongEnemy(TowerEntity tower)
+    {
+        GameObject target = null;
+        float leastAlong = Mathf.Infinity;
+        //float distanceSquared = Mathf.Infinity;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+
+            if (leastAlong > EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().distanceTraveled
+                && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                leastAlong = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().distanceTraveled;
+                target = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return target;
+    }
+
+    public static GameObject FindSlowestEnemy(TowerEntity tower)
+    {
+        GameObject target = null;
+        float slowestSpeed = Mathf.Infinity;
+        //float distanceSquared = Mathf.Infinity;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+
+            if (slowestSpeed > EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().speed
+                && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                slowestSpeed = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().speed;
+                target = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return target;
+    }
+
+    public static GameObject FindLeastHealthEnemy(TowerEntity tower)
+    {
+        GameObject target = null;
+        float leastHealth = Mathf.Infinity;
+        //float distanceSquared = Mathf.Infinity;
+        Vector3 currentPosition = tower.position;
+        for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
+        {
+            Vector3 direction = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().position - currentPosition;
+            float distanceSquaredToTarget = direction.sqrMagnitude;
+
+            if (leastHealth > EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().health
+                && distanceSquaredToTarget < (tower.range * tower.range))
+            {
+                leastHealth = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().health;
+                target = EnemyMgr.inst.spawnedEnemies[i];
+            }
+        }
+        return target;
+    }
+
+
 }

@@ -13,6 +13,9 @@ public class ControlMgr : MonoBehaviour
 
     public bool backgroundMusicOn = true;
 
+    public GameObject pauseScreen;
+    public bool pause;
+
     //--------------------------------------------------------------------------------------------------
     // Start is called before the first frame update
     void Start()
@@ -40,8 +43,36 @@ public class ControlMgr : MonoBehaviour
                 SoundMgr.inst.PlayBackgroundMusic();
             }
             backgroundMusicOn = !backgroundMusicOn;
+
+            if (!pause)
+            {
+                Pause();
+            }
+            else
+            {
+                Resume();
+            }
         }
 
     }
     //--------------------------------------------------------------------------------------------------
+
+    private void Pause()
+    {
+        Time.timeScale = 0;
+        UIMgr.inst.pauseScreen.SetActive(true);
+        pause = true;
+    }
+
+    private void Resume()
+    {
+        Time.timeScale = 1f;
+        UIMgr.inst.pauseScreen.SetActive(false);
+        pause = false;
+    }
+
+
+
 }
+
+

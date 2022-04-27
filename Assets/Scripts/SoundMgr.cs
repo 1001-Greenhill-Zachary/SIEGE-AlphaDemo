@@ -45,6 +45,21 @@ public class SoundMgr : MonoBehaviour
         audioSources[2].Play();
     }
 
+    public void PlayArrowProjectileFireSound()
+    {
+        audioSources[3].Play();
+    }
+
+    public void PlaySIEGETowerSound()
+    {
+        audioSources[4].Play();
+    }
+
+    public void PlayTower2Sound()
+    {
+        audioSources[5].Play();
+    }
+
 }
 
 //Backgournd Music "Epic" credited to Royalty Free Music from Bensound www.bensound.com
