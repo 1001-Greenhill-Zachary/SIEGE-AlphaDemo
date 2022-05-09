@@ -147,10 +147,10 @@ RectTransform:
   m_Father: {fileID: 204648826}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 17.75}
-  m_SizeDelta: {x: 0, y: 263.4}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 17.749992}
+  m_SizeDelta: {x: 0, y: -35.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7135824
 MonoBehaviour:
@@ -3055,8 +3055,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000023657898}
-  m_SizeDelta: {x: 0, y: 420}
+  m_AnchoredPosition: {x: -0.00003046231, y: 0.000009234434}
+  m_SizeDelta: {x: 0, y: 442.8}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &355707961
 PrefabInstance:
@@ -3659,7 +3659,7 @@ MonoBehaviour:
 
     W/S/A/D + SHIFT
 
-    W/S + CTRL
+    W/S + Q
 
     1 - 3
 
@@ -3722,7 +3722,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 99
+  m_firstOverflowCharacterIndex: 96
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -3746,7 +3746,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 451223669}
-    characterCount: 105
+    characterCount: 102
     spriteCount: 0
     spaceCount: 25
     wordCount: 28
@@ -8045,10 +8045,10 @@ RectTransform:
   m_Father: {fileID: 202274517}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 375, y: 100}
+  m_AnchoredPosition: {x: 0.000077382, y: 113.25}
+  m_SizeDelta: {x: 375, y: -236.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &889557320
 MonoBehaviour:
@@ -13514,7 +13514,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2044157975}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6271428
+  m_Size: 0.71866363
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17286,7 +17286,7 @@ RectTransform:
   m_Father: {fileID: 1713798595}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.3728572}
+  m_AnchorMin: {x: 0, y: 0.28133637}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}

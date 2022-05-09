@@ -50,7 +50,7 @@ public class CameraMgr : MonoBehaviour
 
             if (Input.GetKey(KeyCode.W))
             {
-                if (Input.GetKey(KeyCode.LeftControl))
+                if (Input.GetKey(KeyCode.Q))
                 {
                     currentPitchEulerAngles.x -= cameraTurnRate * Time.deltaTime;
                 }
@@ -61,7 +61,7 @@ public class CameraMgr : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.S))
             {
-                if (Input.GetKey(KeyCode.LeftControl))
+                if (Input.GetKey(KeyCode.Q))
                 {
                     currentPitchEulerAngles.x += cameraTurnRate * Time.deltaTime;
                 }
@@ -101,7 +101,7 @@ public class CameraMgr : MonoBehaviour
 
             if (Input.GetKey(KeyCode.W))
             {
-                if (Input.GetKey(KeyCode.LeftControl))
+                if (Input.GetKey(KeyCode.Q))
                 {
                     currentPitchEulerAngles.x -= cameraTurnRate * Time.deltaTime;
                 }
@@ -112,7 +112,7 @@ public class CameraMgr : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.S))
             {
-                if (Input.GetKey(KeyCode.LeftControl))
+                if (Input.GetKey(KeyCode.Q))
                 {
                     currentPitchEulerAngles.x += cameraTurnRate * Time.deltaTime;
                 }
