@@ -13,6 +13,11 @@ public class TowerEntity : MonoBehaviour
     public string projectileTypeString;
     public string targetingMode;
     public bool isSIEGE;
+    public bool isType1;
+    public bool isType2;
+    public int upgradeCost;
+    public float AOEDamage;
+    public float AOERange;
     
     [Header ("Computational")]
     public Vector3 position;
@@ -20,8 +25,17 @@ public class TowerEntity : MonoBehaviour
     public float timer = 1;
     public GameObject selectionCircle;
     public GameObject selectedModeText;
+    public GameObject upgradeText;
+    public GameObject statsText;
     public int targetingModeIndex=0;
     public float adjustedRange;
+    public Transform target;
+    public Vector3 targetPosition;
+    public Vector3 lookPosition;
+    public int step=2;
+    public bool upgraded;
+    public int upgradeTimes = 0;
+    public int cashBack;
     [Header("Set Up")]
     //The type of tower it is, corresponding to TowerSelectionMgr
     //public int towerTypeID;
@@ -43,20 +57,45 @@ public class TowerEntity : MonoBehaviour
             position = transform.position;
             selectionCircle.SetActive(false);
             selectedModeText.SetActive(false);
+            upgradeText.SetActive(false);
+            statsText.SetActive(false);
             targetingMode = "SIEGE";
-            this.selectedModeText.GetComponent<TextMesh>().text = targetingMode;
+            selectedModeText.GetComponent<TextMesh>().text = targetingMode;
+            upgradeText.GetComponent<TextMesh>().text = "Upgrade Cost: " + upgradeCost;
+            statsText.GetComponent<TextMesh>().text = "Damage: " + damage + "\nRange: SIGE (Unlimeted)" + "\nFire Rate: " + fireRate;
             isSIEGE = true;
         }
         else
         {
+            isSIEGE = false;
+            if (projectileTypeString == "projectile1")
+            {
+                isType1 = true;
+            }
+            if (projectileTypeString == "projectile2")
+            {
+                isType2 = true;
+            }
             //When the tower is created, set the position variable equal to the transform position
             position = transform.position;
             selectionCircle.SetActive(false);
             selectedModeText.SetActive(false);
+            upgradeText.SetActive(false);
+            statsText.SetActive(false);
             targetingMode = TowerMgr.inst.targetingModes[targetingModeIndex];
-            this.selectedModeText.GetComponent<TextMesh>().text = targetingMode;
-            isSIEGE = false;
+            selectedModeText.GetComponent<TextMesh>().text = targetingMode;
+            upgradeText.GetComponent<TextMesh>().text = "Upgrade Cost: " + upgradeCost;
+            if (isType2)
+            {
+                statsText.GetComponent<TextMesh>().text = "Damage: " + damage + "\nRange: " + range + "\nFire Rate: " + fireRate + "\nAOE Damage: " + AOEDamage + "\nAOE Range: " + AOERange;
+            }
+            else
+            {
+                statsText.GetComponent<TextMesh>().text = "Damage: " + damage + "\nRange: " + range + "\nFire Rate: " + fireRate;
+            }
+                
         }
+        cashBack = cost;
     }
     //--------------------------------------------------------------------------------------------------
     // Update is called once per frame
@@ -67,14 +106,29 @@ public class TowerEntity : MonoBehaviour
         {
             if (timer > fireRate)
             {
+                targetPosition = ProjectileMgr.inst.castlePositions[ProjectileMgr.inst.castlePositionIndex];
+                lookPosition = targetPosition - transform.position;
+                var rotation = Quaternion.LookRotation(lookPosition);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * step);
                 ProjectileMgr.inst.FireProjectile(projectileTypeString, this, targetedEnemy);
                 timer = 0;
             }
         }
-        else
+        else if (isType1)
         {
             targetedEnemy = Utils.GetTarget(targetingMode, this);
-            
+            if (targetedEnemy == null)
+            {
+
+            }
+            else
+            {
+                //Uncomment this for tower 1 to rotate towards enemies
+                //target = targetedEnemy.transform;
+                //lookPosition = target.position - transform.position;
+                //var rotation = Quaternion.LookRotation(lookPosition);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * step);
+            }
             if (targetedEnemy == null)
             {
 
@@ -87,6 +141,46 @@ public class TowerEntity : MonoBehaviour
                     timer = 0;
                 }
             }
+        }
+        else
+        {
+            targetedEnemy = Utils.GetTarget(targetingMode, this);
+            if (targetedEnemy == null)
+            {
+
+            }
+            else
+            {
+                if (timer > fireRate)
+                {
+                    ProjectileMgr.inst.FireProjectile(projectileTypeString, this, targetedEnemy);
+                    timer = 0;
+                }
+            }
+        }
+    }
+
+    public void Upgrade()
+    {
+        cashBack = cashBack + upgradeCost;
+        fireRate = (fireRate / 2) + (fireRate/4);
+        damage = damage + 10;
+        range = range + 20;
+        selectionCircle.GetComponent<RangeCircle>().UpdateRange();
+        cost = cost * 2;
+        upgradeCost = upgradeCost * 2;
+        upgradeCost = upgradeCost + 10;
+        upgradeTimes++;
+        upgradeText.GetComponent<TextMesh>().text = "(" + upgradeTimes + ")-Upgrade Cost: " + upgradeCost;
+        if (isSIEGE==false && isType1==false)
+        {
+            print("HERE");
+            AOEDamage = AOEDamage + 10;
+            statsText.GetComponent<TextMesh>().text = "Damage: " + damage + "\nRange: " + range + "\nFire Rate: " + fireRate + "\nAOE Damage: " + AOEDamage + "\nAOE Range: " + AOERange;
+        }
+        else
+        {
+            statsText.GetComponent<TextMesh>().text = "Damage: " + damage + "\nRange: " + range + "\nFire Rate: " + fireRate;
         }
     }
 }

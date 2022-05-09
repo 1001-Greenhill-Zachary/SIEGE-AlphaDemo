@@ -15,7 +15,7 @@ public class RangeCircle : MonoBehaviour
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         circleBaseSize = Vector3.Scale(transform.localScale, mesh.bounds.size);
         circleBaseSize = circleBaseSize * 2;
-        circleNewSize = circleBaseSize * (tower.range);
+        circleNewSize = circleBaseSize * (tower.range + 3);
         transform.localScale = circleNewSize;
         adjustedPosition = transform.position;
         adjustedPosition.y = adjustedPosition.y + 3;
@@ -31,7 +31,10 @@ public class RangeCircle : MonoBehaviour
 
     public void UpdateRange()
     {
-        circleNewSize = circleBaseSize * tower.range;
+        circleNewSize = circleBaseSize * (tower.range + 15);
         transform.localScale = circleNewSize;
+        adjustedPosition = transform.position;
+        adjustedPosition.y = adjustedPosition.y + 3;
+        transform.position = adjustedPosition;
     }
 }

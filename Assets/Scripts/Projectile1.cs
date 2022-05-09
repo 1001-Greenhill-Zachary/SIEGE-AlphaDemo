@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile1 : MonoBehaviour
 {
-    public float speed =50;
+    public float speed =75;
 
     public bool isTraveling = true;
 
@@ -12,11 +12,14 @@ public class Projectile1 : MonoBehaviour
     public TowerEntity tower;
 
     public Vector3 targetPosition;
+    public Vector3 adjustedStartPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        adjustedStartPosition = transform.position;
+        adjustedStartPosition.y = adjustedStartPosition.y + 6; 
+        transform.position = adjustedStartPosition;
     }
 
     // Update is called once per frame

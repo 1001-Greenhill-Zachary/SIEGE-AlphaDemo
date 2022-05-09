@@ -18,14 +18,11 @@ public class ProjectileMgr : MonoBehaviour
 
     public GameObject AOEModel;
     public Vector3 AOELocation;
-    public List<GameObject> AOEList;
-    public int AOEIndex=-1;
 
     public List<Vector3> castlePositions;
     public int castlePositionIndex = 0;
 
-    public float timer = 0;
-    public float waitTime = 3;
+    public List<GameObject> AOEs;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +33,15 @@ public class ProjectileMgr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        for(int j=0;j<AOEs.Count;j++)
+        {
+            if (AOEs[j].GetComponent<AOE>().delete)
+            {
+                Destroy(AOEs[j]);
+                AOEs.RemoveAt(j);
+                j--;
+            }
+        }
         for (int i=0;i<projectilesList1.Count;i++)
         {
             if (projectilesList1[i].GetComponent<Projectile1>().isTraveling == false)
@@ -58,57 +64,30 @@ public class ProjectileMgr : MonoBehaviour
         }
         for (int i = 0; i < projectilesList2.Count; i++)
         {
-            if (projectilesList2[i].GetComponent<Projectile2>().target != null)
-            {
-                AOELocation = projectilesList2[i].GetComponent<Projectile2>().target.GetComponent<EnemyEntity>().position;
-                AOELocation.y = 1;
-            }
+            float range = projectilesList2[i].GetComponent<Projectile2>().AOErange;
+            float AOEDamageTemp = projectilesList2[i].GetComponent<Projectile2>().AOEdamage;
             if (projectilesList2[i].GetComponent<Projectile2>().isTraveling == false)
             {
-                if (timer < waitTime)
-                {
-                    timer = timer + Time.deltaTime;
-                }
-                else
-                {
-                    timer = 0;
-                }
+                AOELocation = projectilesList2[i].GetComponent<Projectile2>().transform.position;
+                AOELocation.y = 1;
                 if (projectilesList2[i].GetComponent<Projectile2>().target == null)
                 {
-                    GameObject temp = Instantiate(AOEModel, AOELocation, transform.rotation, transform);
                     Destroy(projectilesList2[i]);
                     projectilesList2.RemoveAt(i);
-                    //AOEList.Add(temp);
-                    //AOEIndex++;
-                    ////print("HERE");
-                    //ExecuteAfterTime(3, AOEIndex);
                 }
                 else
                 {
-                    //GameObject temp = Instantiate(AOEModel, AOELocation, transform.rotation, transform);
+
                     int damage = projectilesList2[i].GetComponent<Projectile2>().tower.damage;
                     projectilesList2[i].GetComponent<Projectile2>().target.GetComponent<EnemyEntity>().health =
                         projectilesList2[i].GetComponent<Projectile2>().target.GetComponent<EnemyEntity>().health - damage;
-                    //Vector3 currentPosition = projectilesList2[i].GetComponent<Projectile2>().target.GetComponent<EnemyEntity>().position;
-                    //for (int x = 0; x < EnemyMgr.inst.spawnedEnemies.Count; x++)
-                    //{
-                    //    Vector3 direction = EnemyMgr.inst.spawnedEnemies[x].GetComponent<EnemyEntity>().position - currentPosition;
-                    //    float distanceSquaredToTarget = direction.sqrMagnitude;
-                    //    if (distanceSquaredToTarget < projectilesList2[i].GetComponent<Projectile2>().AOErange * projectilesList2[i].GetComponent<Projectile2>().AOErange)
-                    //    {
-                    //        EnemyMgr.inst.spawnedEnemies[x].GetComponent<EnemyEntity>().health =
-                    //            EnemyMgr.inst.spawnedEnemies[x].GetComponent<EnemyEntity>().health - projectilesList2[i].GetComponent<Projectile2>().AOEdamage;
-                    //    }
-                    //}
-                    //AOEList.Add(temp);
-                    //AOEIndex++;
-                    //print("HERE");
-                    //ExecuteAfterTime(3, AOEIndex);
                     Destroy(projectilesList2[i]);
                     projectilesList2.RemoveAt(i);
                 }
-                
-
+                GameObject temp = Instantiate(AOEModel, AOELocation, transform.rotation, transform);
+                temp.GetComponent<AOE>().AOERange = range;
+                temp.GetComponent<AOE>().AOEDamage = AOEDamageTemp;
+                AOEs.Add(temp);
             }
         }
         for (int i = 0; i < projectilesList3.Count; i++)
@@ -141,6 +120,8 @@ public class ProjectileMgr : MonoBehaviour
             GameObject temp = Instantiate(projectileTypes[1], tower.position, transform.rotation, transform);
             temp.GetComponent<Projectile2>().tower = tower;
             temp.GetComponent<Projectile2>().target = targetedEnemy;
+            temp.GetComponent<Projectile2>().AOEdamage = tower.AOEDamage;
+            temp.GetComponent<Projectile2>().AOErange = tower.AOERange;
             projectilesList2.Add(temp);
         }
         else if (projectileType == "projectile3")
@@ -156,15 +137,5 @@ public class ProjectileMgr : MonoBehaviour
                 castlePositionIndex = 0;
             }
         }
-    }
-
-    IEnumerator ExecuteAfterTime(float time, int index)
-    {
-        print("HERE");
-        yield return new WaitForSeconds(time);
-
-        Destroy(AOEList[index]);
-        AOEList.RemoveAt(index);
-        AOEIndex--;
     }
 }

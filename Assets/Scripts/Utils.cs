@@ -129,7 +129,6 @@ public static class Utils
             if (farthestAlong < EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().distanceTraveled 
                 && distanceSquaredToTarget < (tower.range * tower.range))
             {
-                //Debug.Log("Distance: " + distanceSquaredToTarget + "RANGE: " + tower.range);
                 farthestAlong = EnemyMgr.inst.spawnedEnemies[i].GetComponent<EnemyEntity>().distanceTraveled;
                 target = EnemyMgr.inst.spawnedEnemies[i];
             }
@@ -141,7 +140,6 @@ public static class Utils
     {
         GameObject target = null;
         float mostHealth = 0;
-        //float distanceSquared = Mathf.Infinity;
         Vector3 currentPosition = tower.position;
         for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
         {
@@ -162,7 +160,6 @@ public static class Utils
     {
         GameObject target = null;
         float fastestSpeed = 0;
-        //float distanceSquared = Mathf.Infinity;
         Vector3 currentPosition = tower.position;
         for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
         {
@@ -201,7 +198,6 @@ public static class Utils
     {
         GameObject target = null;
         float leastAlong = Mathf.Infinity;
-        //float distanceSquared = Mathf.Infinity;
         Vector3 currentPosition = tower.position;
         for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
         {
@@ -222,7 +218,6 @@ public static class Utils
     {
         GameObject target = null;
         float slowestSpeed = Mathf.Infinity;
-        //float distanceSquared = Mathf.Infinity;
         Vector3 currentPosition = tower.position;
         for (int i = 0; i < EnemyMgr.inst.spawnedEnemies.Count; i++)
         {

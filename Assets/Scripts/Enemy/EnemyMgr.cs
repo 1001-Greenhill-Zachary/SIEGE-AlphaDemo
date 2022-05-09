@@ -10,6 +10,8 @@ public class EnemyMgr : MonoBehaviour
     // List to manage enemies
     public List<GameObject> spawnedEnemies;
 
+    public float currencyRateDecrease;
+
     public float despawnRadius;
     public Transform endPoint;
 
@@ -35,10 +37,11 @@ public class EnemyMgr : MonoBehaviour
             if (spawnedEnemies[i].GetComponent<EnemyEntity>().health <= 0)
             {
                 // Add bounty to currency
-                GameMgr.inst.currency += spawnedEnemies[i].GetComponent<EnemyEntity>().bounty;
+                GameMgr.inst.currency += (int)(spawnedEnemies[i].GetComponent<EnemyEntity>().bounty / (1 + (GameClock.inst.runTime / currencyRateDecrease)));
 
                 // Remove enemy from game
                 Destroy(spawnedEnemies[i].gameObject);
+                SoundMgr.inst.PlayEnDeathSound();
                 // Remove enemy from list
                 spawnedEnemies.RemoveAt(i);
             }
@@ -46,8 +49,12 @@ public class EnemyMgr : MonoBehaviour
             // Remove enemy if it has reached end of map
             if (Vector3.Distance(spawnedEnemies[i].transform.position, endPoint.transform.position) < despawnRadius)
             {
+                // Add bounty to currency
+                GameMgr.inst.currency += spawnedEnemies[i].GetComponent<EnemyEntity>().bounty;
+
                 // Remove enemy from game
                 Destroy(spawnedEnemies[i].gameObject);
+                SoundMgr.inst.PlayLoseLifeSound();
                 // Remove enemy from list
                 spawnedEnemies.RemoveAt(i);
 

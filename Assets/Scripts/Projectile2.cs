@@ -19,15 +19,20 @@ public class Projectile2 : MonoBehaviour
     public float initialDistance;
     public float change = 4;
 
-    public float AOErange = 20;
-    public int AOEdamage = 5;
+    public float AOErange;
+    public float AOEdamage;
+    public Vector3 adjustedStartPosition;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         distance = Vector3.Distance(transform.position, targetPosition);
         height = distance / 2;
         initialDistance = distance;
+        adjustedStartPosition = transform.position;
+        adjustedStartPosition.y = adjustedStartPosition.y + 8;
+        transform.position = adjustedStartPosition;
 
     }
 
@@ -68,11 +73,7 @@ public class Projectile2 : MonoBehaviour
         if (distance < 3f)
         {
             isTraveling = false;
+            SoundMgr.inst.PlayExplosionSound();
         }
-    }
-
-    public void AreaDamage()
-    {
-
     }
 }
