@@ -1,6 +1,6 @@
 {
 "companyName": "FrogMaze",
-"productName": "SIEGE_Beta",
+"productName": "SIEGE",
 "dataUrl": "Release.data.unityweb",
 "wasmCodeUrl": "Release.wasm.code.unityweb",
 "wasmFrameworkUrl": "Release.wasm.framework.unityweb",
