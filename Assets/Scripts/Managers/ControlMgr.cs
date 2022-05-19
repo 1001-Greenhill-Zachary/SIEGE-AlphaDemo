@@ -26,11 +26,11 @@ public class ControlMgr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Does nothing right now
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            //SoundMgr.inst.StopBackgroundMusic();
-            //Probably turn this into pause menu later on, just imported form as6
-            Application.Quit();
+            /* Edited out for web build */
+            //Application.Quit();
         }
 
 
